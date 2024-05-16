@@ -73,6 +73,14 @@ resource "google_compute_instance" "hashicat" {
 
 }
 
+module "cloud-storage" {
+  source     = "app.terraform.io/db-test-2/cloud-storage/google"
+  version    = "3.4.1"
+  names      = ["hashicat-private"]
+  prefix     = var.prefix
+  project_id = var.project
+}
+
 resource "null_resource" "configure-cat-app" {
   depends_on = [
     google_compute_instance.hashicat,
@@ -80,14 +88,6 @@ resource "null_resource" "configure-cat-app" {
 
   triggers = {
     build_number = timestamp()
-  }
-
-  module "cloud-storage" {
-    source     = "app.terraform.io/db-test-2/cloud-storage/google"
-    version    = "3.4.1"
-    names      = ["hashicat-private"]
-    prefix     = var.prefix
-    project_id = var.project
   }
 
   provisioner "file" {
