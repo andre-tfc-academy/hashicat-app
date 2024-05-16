@@ -82,6 +82,14 @@ resource "null_resource" "configure-cat-app" {
     build_number = timestamp()
   }
 
+  module "cloud-storage" {
+    source     = "app.terraform.io/db-test-2/cloud-storage/google"
+    version    = "3.4.1"
+    names      = ["hashicat-private"]
+    prefix     = var.prefix
+    project_id = var.project
+  }
+
   provisioner "file" {
     source      = "files/"
     destination = "/home/ubuntu/"
